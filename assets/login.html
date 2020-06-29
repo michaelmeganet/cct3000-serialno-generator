@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="bootstrap.min.2.css">
+	<title>Log in page</title>
+</head>
+<body>
+
+ <div class="container"> 
+        <div class="row"> 
+
+            <div class="col-sm-6">
+              <h2>This is the Login Page</h2>
+              <form name="loginForm" id= "loginForm" action="#" method="POST">
+                <div class="control-group">
+                  <input type="text" name="email" id="email" data-rules="required|valid_email" data-rules="Email" class="validate input-medium input-xlarge" placeholder="Email">
+                  <p class="help-block"></p>
+   
+                </div>
+                <div class="control-group">
+                  <input type="password" name="password" id="password" data-rules="required|matches[password_confirm]" class="validate input-medium input-xlarge" placeholder="Password" >
+
+                  <p class="help-block"></p>
+                </div>
+               <div class="control-group">
+                  <input type="password" name="password_confirm" id="password_confirm" data-rules="required|matches[password_confirm]" class="validate input-medium input-xlarge" placeholder="Password">
+                  <p class="help-block"></p>
+                </div>                
+                <button type="submit" class="btn btn-primary">Sign in</button>
+              </form>
+            </div>
+        </div>
+  </div>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="bootstrap.min.2.js"></script>
+<script type="text/javascript" src="validate.min.js"></script>
+<script type="text/javascript" src="validate_helper.js"></script>
+<script>
+	var $my_form =  $("#loginForm");
+	$my_form.validate(function($form, e){ alert("submitted") })
+</script>
+</body>
+</html>
+
+

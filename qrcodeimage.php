@@ -1,5 +1,5 @@
 <?php
-include_once('phpqrcode-2010100721_1.1.4/phpqrcode/qrlib.php');
+include_once('./assets/phpqrcode-2010100721_1.1.4/phpqrcode/qrlib.php');
 if (isset($_GET['code'])){
     $code = urldecode($_GET['code']);
     $filename = false; //if don't want to have filename, must be FALSE, not '' / string(0);
