@@ -43,7 +43,8 @@ $serialno = 0;
 foreach ($all_IDsets as $key => $value) {
     $serialno++;
     #echo " $value | $serialno" . "<br>";
-    echo "Serial Number : $serialno<br>";
+    echo "No : $serialno<br>";
+    echo "Serial Number : $value<br>";
     $urlencode_value = urlencode($value);
     #echo "\$value = $value, encoded to ===> $urlencode_value<br>";
     ?>
