@@ -5,8 +5,8 @@ include_once 'IdGenerate.class.php';
 function generate_runno($j) {
     $date = new DateTime();
     $date->setDate(2020, 10, 3);
-    echo $date->format('d-m-Y') . " | ";
-    $expiredate = $date->format('d-m-Y');
+    echo $date->format('Y-m-d') . " | ";
+    $expiredate = $date->format('Y-m-d');
     // $j = 1001; //only one user/machine ID
     $datetimenow = time();
     echo(date("d-m-Y", $datetimenow)) . "<br>";
@@ -42,7 +42,15 @@ echo"<br>list down array \$instantid<br>";
 $serialno = 0;
 foreach ($all_IDsets as $key => $value) {
     $serialno++;
-    echo " $value | $serialno" . "<br>";
+    #echo " $value | $serialno" . "<br>";
+    echo "Serial Number : $serialno<br>";
+    $urlencode_value = urlencode($value);
+    #echo "\$value = $value, encoded to ===> $urlencode_value<br>";
+    ?>
+    <img src="qrcodeimage.php?code=<?php echo $urlencode_value; ?>"/>
+    <?php
+    echo "<br>";
+    echo "======================================================<br>";
 }
 echo "<br>";
 

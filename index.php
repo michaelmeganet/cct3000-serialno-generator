@@ -55,9 +55,9 @@ function callSqlInsert($instancetid, $userid, $expiredate, $serialno, $datecreat
 }
 
 function insertSQL($instancetid, $userid, $expiredate, $serialno, $datecreate) {
-    $sqlInsert = "INSERT INTO serialtable SET instantid = $instancetid, "
-            . " userid = $userid, expiredate = $expiredate , serialno = $serialno,"
-            . " datecreate = $datecreate;";
+    $sqlInsert = "INSERT INTO serialtable SET instanceid = '$instancetid', "
+            . " userid = '$userid', expiredate = '$expiredate' , serialno = '$serialno',"
+            . " datecreate = '$datecreate';";
     echo "$sqlInsert = $sqlInsert <br>";
     $objinsert = new SQL($sqlInsert);
     $result = $objinsert->InsertData();
@@ -67,8 +67,8 @@ function insertSQL($instancetid, $userid, $expiredate, $serialno, $datecreate) {
 function generate_runno($j) {
     $date = new DateTime();
     $date->setDate(2020, 10, 3);
-    echo $date->format('d-m-Y') . " | ";
-    $expiredate = $date->format('d-m-Y');
+    echo $date->format('Y-m-d') . " | ";
+    $expiredate = $date->format('Y-m-d');
     // $j = 1001; //only one user/machine ID
 //    $datetimenow = time();
     $datecreate = date('Y-m-d H:i:s');
