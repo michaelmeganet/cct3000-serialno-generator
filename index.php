@@ -1,9 +1,20 @@
 <?php
-
 include_once 'class/dbh.inc.php';
 include_once 'class/variables.inc.php';
 include_once 'class/phhdate.inc.php';
 include_once 'IdGenerate.class.php';
+
+## get lastest serial no
+$sql = "SELECT datecreate, instanceid, serialno FROM serialtable ORDER BY sid DESC LIMIT 0, 1";
+$objRunno = new SQL($sql);
+$recordset = $objRunno->getResultOneRowArray();
+$serialno = $recordset['serialno'];
+$datecreate = $recordset['datecreate'];
+$instanceid = $recordset['instanceid'];
+
+echo "\$serialno = $serialno with instanceid = $instanceid,  created no $datecreate <br>";
+//echo "newrunno = $newrunno <br>";
+echo "<hr>";
 
 function callSqlInsert($instancetid, $userid, $expiredate, $serialno, $datecreate) {
 //    $instancetid,$userid, $expiredate, $serialno,$todaynow
@@ -64,7 +75,7 @@ function insertSQL($instancetid, $userid, $expiredate, $serialno, $datecreate) {
     echo "$result<br>";
 }
 
-function generate_runno($j) {
+function generate_runno($j, $runno, $instanceid2) {
     $date = new DateTime();
     $date->setDate(2020, 10, 3);
     echo $date->format('Y-m-d') . " | ";
@@ -75,23 +86,48 @@ function generate_runno($j) {
 
 //    $datecreate = date("Y-m-d", strtotime($datetimenow));
     echo "$datecreate " . "<br>";
-    $serialno = 0;
+    $serialno = $runno;
 //    $instantid = [];
-    for ($i = 1; $i < 10; $i++) {
+    for ($i = 1; $i < 2; $i++) {
         # code...
         //with in 100 time loop of $i
 
         $params = array('work_id' => $j,);
         $idGenerate = IdGenerate::getInstance($params);
         $instancetid = $idGenerate->generatorNextId();
-        $serialno++;
+        //$serialno++;
         $sid = '';
         // return $id;
         // Prints the day, date, month, year, time, AM or PM
-        insertSQL($instancetid, $j, $expiredate, $serialno, $datecreate);
+        $sql = "SELECT datecreate, instanceid, serialno FROM serialtable ORDER BY sid DESC LIMIT 0, 1";
+        $objcheckInstance = new SQL($sql);
+        $recordset = $objcheckInstance->getResultOneRowArray();
+        $instanceidcheck = $recordset['instanceid'];
+        $serial_no = $recordset['serialno'];
+        echo "\$instanceidcheck = $instanceidcheck , \$instanceid2 = $instanceid2 <br>";
+        echo "\$serial_no = $serial_no <br>";
+        $sql2 = "SELECT datecreate, instanceid, serialno FROM serialtable ORDER BY sid DESC LIMIT 0, 1";
+        $objcheckInstance2 = new SQL($sql2);
+        $recordset2 = $objcheckInstance2->getResultOneRowArray();
+        $instanceidcheck2 = $recordset2['instanceid'];
+        $serial_no2 = $recordset2['serialno'];
+        $serial_no2 = (int) $serial_no2;
+        $serial_no = (int) $serial_no;
+        $serialno = (int) $serialno;
+        echo "\$instanceidcheck2 = $instanceidcheck2 , \$instanceid2 = $instanceid2 <br>";
+        echo "\$serial_no = $serial_no <br>";
+        if ($serial_no2 > $serialno) {
+            $serialno = $serial_no2;
+        }
+
+        if ($instanceid2 != $instanceidcheck2) {
+            $serialno = $serial_no;
+            insertSQL($instancetid2, $j, $expiredate, $serialno, $datecreate);
+        } else {
+            insertSQL($instancetid, $j, $expiredate, $serialno, $datecreate);
+        }
+
         echo "work_id = $j, \$instancetid = $instancetid    |   " . $datecreate . " | expireddate = $expiredate | $serialno<br>";
-        // echo "work_id = $j, \$id = $id    |   " . date("l jS \of F Y h:i:s A") . " <br>";date_format($expiredate, 'd/m/Y');
-        // sleep(1);
     }
 //    echo"<br>list down array \$instancetid<br>";
 //    print_r($instancetid);
@@ -99,9 +135,48 @@ function generate_runno($j) {
     return $instancetid;
 }
 
-$userid1 = 'cct3000';
-$getID1 = generate_runno($userid1);
+if (isset($_POST['newrunno'])) {
 
+    $newrunno = $_POST['newrunno'];
+
+    echo "newrunno = $newrunno, serialno = $serialno <br>";
+    $newrunno = (int) $newrunno;
+    //$newrunno++;
+    $userid1 = 'cct3000';
+    //$objGenerate = new IdGenerate($userid1);
+    $getID1 = generate_runno($userid1, $newrunno, $instanceid);
+    //var_dump($getID1);
+    echo "<br>";
+} elseif (isset($serialno)) {
+
+    $newrunno = $serialno;
+    $newrunno++;
+}
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>get a new running no </title>
+    </head>
+    <body>
+        <form action="" method="POST">
+            <label for="fname">First name:</label><br>
+            <input type="text" id="newrunno" name="newrunno"
+                   <?php
+                   if (isset($newrunno)) {
+                       ?>
+                       value = "<?php echo $newrunno; ?>">
+                       <?php
+                   }
+                   ?><br>
+
+            <input type="submit" value="Submit">
+        </form>
+
+    </body>
+</html>
+<?php
+//$getID1 = generate_runno($userid1);
 //$userid1 = 'cct3000';
 //$userid2 = 'michael';
 //$getID1 = generate_runno($userid1);
@@ -114,3 +189,4 @@ $getID1 = generate_runno($userid1);
 //    echo " $value | $serialno" . "<br>";
 //}
 //echo "<br>";
+?>
